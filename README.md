@@ -27,7 +27,7 @@ cp ~/.claude/commands/*.md Claude/code/commands/
 To build a skill for upload to the desktop app (`.skill` files are gitignored):
 
 ```zsh
-cd Claude/skills && zip -r ../../my-skill.skill my-skill -x '*/__pycache__/*'
+cd Claude/skills && zip -r ../../<name>.skill <name> -x '*/__pycache__/*'
 ```
 
 Never commit API keys or tokens. Skills read them from environment variables.
