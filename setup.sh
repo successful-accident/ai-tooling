@@ -73,7 +73,7 @@ for f in "$DIR"/Claude/code/hooks/*; do
   sync "$f" "$HOME/.claude/hooks/$(basename "$f")"
   [ -n "$CHECK" ] || chmod +x "$HOME/.claude/hooks/$(basename "$f")"
 done
-(cd "$DIR/Claude/skills" 2>/dev/null && find . -type f ! -name .DS_Store) | sed 's|^\./||' | while read -r f; do
+(cd "$DIR/Claude/skills" && find . -type f ! -name .DS_Store) | sed 's|^\./||' | while read -r f; do
   sync "$DIR/Claude/skills/$f" "$HOME/.claude/skills/$f"
 done
 
