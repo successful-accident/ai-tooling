@@ -32,8 +32,8 @@ if [ ! -f "$DIR/setup.sh" ] || [ ! -d "$DIR/Claude" ]; then
 fi
 
 # Cloud sessions can't clone this private repo, so the script carries CLAUDE.md
-# inline. It must exit 0 or the session fails to start. Plugin installs aren't
-# documented to work there; their output goes to ~/.claude/cloud-setup.log.
+# inline. It must exit 0 or the session fails to start. Plugin installs work
+# there (undocumented, confirmed 2026-11-19); output goes to ~/.claude/cloud-setup.log.
 if [ "${1:-}" = "--cloud" ]; then
   cat <<EOF
 #!/usr/bin/env bash

@@ -41,9 +41,8 @@ Cloud sessions (claude.ai/code) can't clone this private repo, so
 `./setup.sh --cloud` prints a script with `CLAUDE.md` built in. Paste it into
 your own environment's Setup script field (not a shared environment). Cloud
 environments cache the setup for about 7 days, so regenerate and re-paste the
-script after you change `CLAUDE.md`. The script also tries the plugin installs
-and logs them to `~/.claude/cloud-setup.log`. If those fail, the plugins aren't
-available in the cloud. Skills and the Microsoft Learn MCP reach cloud sessions
+script after you change `CLAUDE.md`. The script also installs the plugins and
+logs that to `~/.claude/cloud-setup.log` (confirmed working 2026-11-19). Skills and the Microsoft Learn MCP reach cloud sessions
 through your claude.ai account: upload the skill there and add Learn as a connector.
 
 megapowers comes from its author's repo, which Claude Code does not update on
