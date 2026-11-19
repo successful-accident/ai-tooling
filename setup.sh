@@ -46,6 +46,10 @@ if command -v claude >/dev/null; then
   for m in $MARKETPLACES; do claude plugin marketplace add "\$m"; done
   for p in $(echo $PLUGINS_WANTED); do claude plugin install "\$p"; done
 fi > ~/.claude/cloud-setup.log 2>&1
+if command -v jq >/dev/null; then
+  f=~/.claude/settings.json; [ -f "\$f" ] || echo '{}' > "\$f"
+  jq '.skillListingBudgetFraction = 0.02' "\$f" > "\$f.tmp" && mv "\$f.tmp" "\$f"
+fi
 exit 0
 EOF
   exit 0
