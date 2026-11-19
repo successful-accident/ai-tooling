@@ -63,7 +63,7 @@ repo to `~/.ai-tooling`, or updates it, and runs from there. Add
 </table>
 
 ```zsh
-curl -fsSL -H "Authorization: Bearer $(gh auth token)" https://raw.githubusercontent.com/successful-accident/AI-Tooling/main/setup.sh | bash
+curl -fsSL -H "Authorization: Bearer $(gh auth token)" https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.sh | bash
 ```
 
 What it covers:

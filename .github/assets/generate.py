@@ -124,7 +124,7 @@ def banner(t):
   <circle cx="{tx+18}" cy="{ty+14}" r="4.5" fill="{t["accent"]}"/>
   <circle cx="{tx+33}" cy="{ty+14}" r="4.5" fill="{t["accent2"]}"/>
   <circle cx="{tx+48}" cy="{ty+14}" r="4.5" fill="{t["border"]}"/>
-  <text x="{tx+tw/2}" y="{ty+18}" text-anchor="middle" font-family="{MONO}" font-size="10.5" fill="{t["muted"]}">zsh — AI-Tooling</text>
+  <text x="{tx+tw/2}" y="{ty+18}" text-anchor="middle" font-family="{MONO}" font-size="10.5" fill="{t["muted"]}">zsh — ai-tooling</text>
   {term_lines}''')
 
 

@@ -46,7 +46,7 @@
   <circle cx="450" cy="50" r="4.5" fill="#d97757"/>
   <circle cx="465" cy="50" r="4.5" fill="#e8b07a"/>
   <circle cx="480" cy="50" r="4.5" fill="#33312c"/>
-  <text x="622.0" y="54" text-anchor="middle" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace" font-size="10.5" fill="#9c9a92">zsh — AI-Tooling</text>
+  <text x="622.0" y="54" text-anchor="middle" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace" font-size="10.5" fill="#9c9a92">zsh — ai-tooling</text>
   <clipPath id="type"><rect x="450" y="76.0" width="0" height="16"><animate attributeName="width" values="0;0;200;200" keyTimes="0;0.04;0.13;1" dur="10.0s" repeatCount="indefinite"/></rect></clipPath><text x="450" y="88.0" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace" font-size="11.5" fill="#d97757">$</text><text x="464" y="88.0" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace" font-size="11.5" fill="#f0eee6" clip-path="url(#type)">./setup.sh --check</text>
   <g><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.170;0.180;0.94;1" dur="10.0s" repeatCount="indefinite"/><text x="450" y="104.5" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace" font-size="11.5" fill="#9c9a92">Files</text></g>
   <g><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.225;0.235;0.94;1" dur="10.0s" repeatCount="indefinite"/><text x="466" y="121.0" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace" font-size="11.5" fill="#9ccc85">ok</text><text x="506" y="121.0" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace" font-size="11.5" fill="#f0eee6">~/.claude/CLAUDE.md</text></g>
