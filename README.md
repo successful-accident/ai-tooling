@@ -1,8 +1,31 @@
-# AI-Tooling
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/banner-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./.github/assets/banner-light.svg">
+  <img alt="AI-Tooling: prompts, instructions and skills for Claude, kept in git and synced to the live apps" src="./.github/assets/banner-light.svg" width="100%">
+</picture>
+
+<p align="center">
+  <a href="#setup-check-and-repair">Setup</a> &bull;
+  <a href="#cloud-environments">Cloud</a> &bull;
+  <a href="#claude">What's here</a> &bull;
+  <a href="#refreshing-copies">Refreshing copies</a>
+</p>
 
 This repo holds my prompts, instructions and skills for AI tools. The files here
 are copies. The live versions are in each app, so after you change one there,
 copy it back here and commit.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/flow-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./.github/assets/flow-light.svg">
+  <img alt="Live apps are copied back to this repo and committed; setup.sh copies the repo over the live apps; setup.sh --cloud prints a script to paste into a cloud environment" src="./.github/assets/flow-light.svg" width="100%">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/divider-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./.github/assets/divider-light.svg">
+  <img alt="" src="./.github/assets/divider-light.svg" width="100%">
+</picture>
 
 ## Setup, check and repair
 
@@ -11,29 +34,48 @@ an existing setup. It is safe to run again: it skips what is already right and
 backs up any file it replaces as `<name>.bak.<timestamp>`. It needs `claude`,
 `jq`, `git` and a GitHub SSH key.
 
-It copies the repo's versions over the live ones, so copy live changes back
-here first (see Refreshing copies).
+> [!IMPORTANT]
+> It copies the repo's versions over the live ones, so copy live changes back
+> here first (see [Refreshing copies](#refreshing-copies)).
 
-From a checkout:
+<table>
+<tr>
+<td width="50%" valign="top">
+
+**From a checkout**
 
 ```zsh
 ./setup.sh           # check everything and fix what's wrong
 ./setup.sh --check   # report only, change nothing
 ```
 
-Without a checkout (the repo is private, so the download uses your `gh` login).
-This clones the repo to `~/.ai-tooling`, or updates it, and runs from there:
+</td>
+<td width="50%" valign="top">
+
+**Without a checkout**
+
+The repo is private, so the download uses your `gh` login. This clones the
+repo to `~/.ai-tooling`, or updates it, and runs from there. Add
+`-s -- --check` after `bash` to report only.
+
+</td>
+</tr>
+</table>
 
 ```zsh
 curl -fsSL -H "Authorization: Bearer $(gh auth token)" https://raw.githubusercontent.com/successful-accident/AI-Tooling/main/setup.sh | bash
 ```
 
-Add `-s -- --check` after `bash` to report only.
+What it covers:
 
-What it covers: `CLAUDE.md`, hooks, skills, the two `settings.json` entries it
-owns (the skill listing budget and the OneDrive hook), the Claude Code plugins
-and the Microsoft Learn MCP server. It ends by printing what has to be done by
-hand in the desktop app, including the claude.ai plugins.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/coverage-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./.github/assets/coverage-light.svg">
+  <img alt="CLAUDE.md, hooks, skills, the two settings.json entries it owns (the skill listing budget and the OneDrive hook), the Claude Code plugins and the Microsoft Learn MCP server" src="./.github/assets/coverage-light.svg" width="100%">
+</picture>
+
+It ends by printing what has to be done by hand in the desktop app, including
+the claude.ai plugins.
 
 ### Cloud environments
 
@@ -45,6 +87,10 @@ script after you change `CLAUDE.md`. The script also sets the skill listing
 budget, installs the plugins and logs the installs to `~/.claude/cloud-setup.log` (confirmed working 2026-11-19). Skills and the Microsoft Learn MCP reach cloud sessions
 through your claude.ai account: upload the skill there and add Learn as a connector.
 
+<details>
+<summary><strong>Updating megapowers</strong></summary>
+<br>
+
 megapowers comes from its author's repo, which Claude Code does not update on
 its own. To update it:
 
@@ -52,6 +98,14 @@ its own. To update it:
 claude plugin marketplace update megapowers
 claude plugin update megapowers@megapowers
 ```
+
+</details>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/divider-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./.github/assets/divider-light.svg">
+  <img alt="" src="./.github/assets/divider-light.svg" width="100%">
+</picture>
 
 ## Claude
 
@@ -85,4 +139,7 @@ To build a skill for upload to the desktop app (`.skill` files are gitignored):
 cd Claude/skills && zip -r ../../<name>.skill <name> -x '*/__pycache__/*'
 ```
 
-Never commit API keys or tokens. Skills read them from environment variables.
+> [!WARNING]
+> Never commit API keys or tokens. Skills read them from environment variables.
+
+<!-- The SVGs in .github/assets come from .github/assets/generate.py; edit it and rerun rather than editing the SVGs. -->
