@@ -4,6 +4,45 @@ This repo holds my prompts, instructions and skills for AI tools. The files here
 are copies. The live versions are in each app, so after you change one there,
 copy it back here and commit.
 
+## Setup, check and repair
+
+`setup.sh` sets up Claude Code on a new Mac or under a new account, and repairs
+an existing setup. It is safe to run again: it skips what is already right and
+backs up any file it replaces as `<name>.bak.<timestamp>`. It needs `claude`,
+`jq`, `git` and a GitHub SSH key.
+
+It copies the repo's versions over the live ones, so copy live changes back
+here first (see Refreshing copies).
+
+From a checkout:
+
+```zsh
+./setup.sh           # check everything and fix what's wrong
+./setup.sh --check   # report only, change nothing
+```
+
+Without a checkout (the repo is private, so the download uses your `gh` login).
+This clones the repo to `~/.ai-tooling`, or updates it, and runs from there:
+
+```zsh
+curl -fsSL -H "Authorization: Bearer $(gh auth token)" https://raw.githubusercontent.com/successful-accident/AI-Tooling/main/setup.sh | bash
+```
+
+Add `-s -- --check` after `bash` to report only.
+
+What it covers: `CLAUDE.md`, hooks, skills, the two `settings.json` entries it
+owns (the skill listing budget and the OneDrive hook), the Claude Code plugins
+and the Microsoft Learn MCP server. It ends by printing what has to be done by
+hand in the desktop app, including the claude.ai plugins.
+
+megapowers comes from its author's repo, which Claude Code does not update on
+its own. To update it:
+
+```zsh
+claude plugin marketplace update megapowers
+claude plugin update megapowers@megapowers
+```
+
 ## Claude
 
 | Path | What it is | Where the live copy is |
@@ -12,6 +51,7 @@ copy it back here and commit.
 | `Claude/cowork/` | Notes on Cowork, plus any folder or project instructions worth keeping | Cowork Customize panel, project settings |
 | `Claude/code/CLAUDE.md` | Global Claude Code instructions | `~/.claude/CLAUDE.md` |
 | `Claude/code/commands/` | Claude Code slash commands | `~/.claude/commands/` |
+| `Claude/code/hooks/` | Claude Code hook scripts. `block_onedrive.sh` denies any tool call that names a OneDrive folder | `~/.claude/hooks/` |
 | `Claude/skills/<name>/` | Unpacked skill source (`SKILL.md`, scripts, references) | `~/.claude/skills/<name>/` for Claude Code; uploaded as a `.skill` zip for the desktop app |
 
 Add subagent definitions under `Claude/code/agents/` (live copies go in
@@ -22,7 +62,12 @@ Add subagent definitions under `Claude/code/agents/` (live copies go in
 ```zsh
 cp ~/.claude/CLAUDE.md Claude/code/CLAUDE.md
 cp ~/.claude/commands/*.md Claude/code/commands/
+cp ~/.claude/hooks/*.sh Claude/code/hooks/
+cp -R ~/.claude/skills/<name> Claude/skills/
 ```
+
+After changing `CLAUDE.md`, update `Claude/system-prompt/system-prompt.md` to
+match (it is the same text without the Lessons section) and paste it into the app.
 
 To build a skill for upload to the desktop app (`.skill` files are gitignored):
 
