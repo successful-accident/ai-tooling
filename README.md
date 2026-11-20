@@ -32,7 +32,7 @@ copy it back here and commit.
 `setup.sh` sets up Claude Code on a new Mac or under a new account, and repairs
 an existing setup. It is safe to run again: it skips what is already right and
 backs up any file it replaces as `<name>.bak.<timestamp>`. It needs `claude`,
-`jq`, `git` and a GitHub SSH key.
+`jq` and `git`.
 
 > [!IMPORTANT]
 > It copies the repo's versions over the live ones, so copy live changes back
@@ -54,8 +54,7 @@ backs up any file it replaces as `<name>.bak.<timestamp>`. It needs `claude`,
 
 **Without a checkout**
 
-The repo is private, so the download uses your `gh` login. This clones the
-repo to `~/.ai-tooling`, or updates it, and runs from there. Add
+This clones the repo to `~/.ai-tooling`, or updates it, and runs from there. Add
 `-s -- --check` after `bash` to report only.
 
 </td>
@@ -63,7 +62,7 @@ repo to `~/.ai-tooling`, or updates it, and runs from there. Add
 </table>
 
 ```zsh
-curl -fsSL -H "Authorization: Bearer $(gh auth token)" https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.sh | bash
 ```
 
 What it covers:
@@ -79,23 +78,11 @@ the claude.ai plugins.
 
 ### Cloud environments
 
-Cloud sessions (claude.ai/code) can't clone this private repo themselves, so
-attach it instead. Use a personal environment (the Default one can't list
-repositories), add this repo under Repositories in its settings, select the repo
-on each session, and use this as the Setup script:
-
-```bash
-#!/usr/bin/env bash
-# Set up Claude Code from AI-Tooling. The repo must be attached to the session.
-mkdir -p ~/.claude
-if [ -d AI-Tooling ]; then ./AI-Tooling/setup.sh; else echo "AI-Tooling not attached"; fi > ~/.claude/cloud-setup.log 2>&1
-exit 0
-```
-
-It runs from `main`, so changes reach new sessions without re-pasting, but cloud
-environments cache the setup for about 7 days. Output goes to
-`~/.claude/cloud-setup.log`. `./setup.sh --cloud` still prints a self-contained
-script with `CLAUDE.md` built in, for an environment without the repo.
+`./setup.sh --cloud` prints a setup script for a Claude Code cloud environment.
+Paste it into the environment's Setup script field. It downloads and runs
+`setup.sh` from `main`, so changes reach new sessions without re-pasting, but
+cloud environments cache the setup for about 7 days. Output goes to
+`~/.claude/cloud-setup.log`.
 
 <details>
 <summary><strong>Updating megapowers</strong></summary>
