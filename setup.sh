@@ -31,7 +31,8 @@ if [ ! -f "$DIR/setup.sh" ] || [ ! -d "$DIR/Claude" ]; then
   else git clone -q "https://github.com/$REPO.git" "$DIR"; fi || { echo "Could not get $REPO"; exit 1; }
 fi
 
-# The cloud script fetches and runs this script, which clones the public repo.
+# The cloud script clones the public repo with git (the raw file CDN can serve
+# a stale setup.sh for a while) and runs this script from the clone.
 # It must exit 0 or the session fails to start. Plugin installs work there
 # (undocumented, confirmed 2026-11-19).
 if [ "${1:-}" = "--cloud" ]; then
@@ -39,7 +40,9 @@ if [ "${1:-}" = "--cloud" ]; then
 #!/usr/bin/env bash
 # Set up Claude Code from $REPO. Output goes to ~/.claude/cloud-setup.log.
 mkdir -p ~/.claude
-curl -fsSL https://raw.githubusercontent.com/$REPO/main/setup.sh | bash > ~/.claude/cloud-setup.log 2>&1
+{ if [ -d ~/.ai-tooling/.git ]; then git -C ~/.ai-tooling pull -q --ff-only
+  else git clone -q --depth 1 https://github.com/$REPO.git ~/.ai-tooling; fi
+  ~/.ai-tooling/setup.sh; } > ~/.claude/cloud-setup.log 2>&1
 exit 0
 EOF
   exit 0

@@ -79,8 +79,8 @@ the claude.ai plugins.
 ### Cloud environments
 
 `./setup.sh --cloud` prints a setup script for a Claude Code cloud environment.
-Paste it into the environment's Setup script field. It downloads and runs
-`setup.sh` from `main`, so changes reach new sessions without re-pasting, but
+Paste it into the environment's Setup script field. It clones `main` and runs
+`setup.sh` from there, so changes reach new sessions without re-pasting, but
 cloud environments cache the setup for about 7 days. Output goes to
 `~/.claude/cloud-setup.log`.
 
