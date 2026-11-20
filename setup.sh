@@ -102,7 +102,7 @@ for m in $MARKETPLACES; do
   else fix "marketplace $m" claude plugin marketplace add "$m"; fi
 done
 for p in $PLUGINS_WANTED; do
-  if echo "$PLUGINS" | grep -q "❯ $p"; then ok "$p"
+  if echo "$PLUGINS" | grep -qE "^ *[❯>] $p\$"; then ok "$p"
   else fix "$p" claude plugin install "$p"; fi
 done
 

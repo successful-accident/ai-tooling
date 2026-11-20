@@ -79,13 +79,23 @@ the claude.ai plugins.
 
 ### Cloud environments
 
-Cloud sessions (claude.ai/code) can't clone this private repo, so
-`./setup.sh --cloud` prints a script with `CLAUDE.md` built in. Paste it into
-your own environment's Setup script field (not a shared environment). Cloud
-environments cache the setup for about 7 days, so regenerate and re-paste the
-script after you change `CLAUDE.md`. The script also sets the skill listing
-budget, installs the plugins and logs the installs to `~/.claude/cloud-setup.log` (confirmed working 2026-11-19). Skills and the Microsoft Learn MCP reach cloud sessions
-through your claude.ai account: upload the skill there and add Learn as a connector.
+Cloud sessions (claude.ai/code) can't clone this private repo themselves, so
+attach it instead. Use a personal environment (the Default one can't list
+repositories), add this repo under Repositories in its settings, select the repo
+on each session, and use this as the Setup script:
+
+```bash
+#!/usr/bin/env bash
+# Set up Claude Code from AI-Tooling. The repo must be attached to the session.
+mkdir -p ~/.claude
+if [ -d AI-Tooling ]; then ./AI-Tooling/setup.sh; else echo "AI-Tooling not attached"; fi > ~/.claude/cloud-setup.log 2>&1
+exit 0
+```
+
+It runs from `main`, so changes reach new sessions without re-pasting, but cloud
+environments cache the setup for about 7 days. Output goes to
+`~/.claude/cloud-setup.log`. `./setup.sh --cloud` still prints a self-contained
+script with `CLAUDE.md` built in, for an environment without the repo.
 
 <details>
 <summary><strong>Updating megapowers</strong></summary>
