@@ -201,16 +201,22 @@ def coverage(t):
 
 
 def divider(t):
-    W, H = 840, 24
+    # A fixed 240x20 ornament, shown at natural size (README width="240"): a full-width
+    # hairline drops below a pixel on a phone. No fill, so it reads on either page theme.
+    W, H = 240, 20
     return svg(W, H, f'''  <defs>
-    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="fadeL" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="{t["accent"]}" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="{t["accent"]}" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="{t["accent"]}" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="fadeR" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="{t["accent"]}" stop-opacity="0.85"/>
       <stop offset="1" stop-color="{t["accent"]}" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect x="0" y="11.5" width="{W}" height="1" fill="url(#fade)"/>
-  <rect x="414" y="6" width="12" height="12" fill="{t["bg"]}" stroke="{t["accent"]}" transform="rotate(45 420 12)">
+  <rect x="0" y="9.25" width="108" height="1.5" fill="url(#fadeL)"/>
+  <rect x="132" y="9.25" width="108" height="1.5" fill="url(#fadeR)"/>
+  <rect x="114" y="4" width="12" height="12" fill="none" stroke="{t["accent"]}" stroke-width="1.5" transform="rotate(45 120 10)">
     <animate attributeName="opacity" values="0.5;1;0.5" dur="4s" repeatCount="indefinite"/>
   </rect>''')
 

@@ -21,11 +21,13 @@ copy it back here and commit.
   <img alt="Live apps are copied back to this repo and committed; setup.sh copies the repo over the live apps; setup.sh --cloud prints a script to paste into a cloud environment" src="./.github/assets/flow-light.svg" width="100%">
 </picture>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/divider-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./.github/assets/divider-light.svg">
-  <img alt="" src="./.github/assets/divider-light.svg" width="100%">
-</picture>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/divider-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./.github/assets/divider-light.svg">
+    <img alt="" src="./.github/assets/divider-light.svg" width="240">
+  </picture>
+</p>
 
 ## Setup, check and repair
 
@@ -98,11 +100,13 @@ claude plugin update megapowers@megapowers
 
 </details>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/divider-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./.github/assets/divider-light.svg">
-  <img alt="" src="./.github/assets/divider-light.svg" width="100%">
-</picture>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/divider-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./.github/assets/divider-light.svg">
+    <img alt="" src="./.github/assets/divider-light.svg" width="240">
+  </picture>
+</p>
 
 ## Claude
 
