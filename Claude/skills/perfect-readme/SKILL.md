@@ -253,7 +253,7 @@ Every README should be assembled from these component types:
 | **Steps/Timeline** | Numbered workflow with connecting line | `steps-dark.svg`, `steps-light.svg` |
 | **Install Card** | Terminal-style command display | `install-dark.svg`, `install-light.svg` |
 | **Before/After** | Side-by-side visual comparison | `before-after.svg` |
-| **Divider** | Gradient line between sections | `divider-dark.svg`, `divider-light.svg` |
+| **Divider** | Small fixed-size ornament between sections, shown at its natural size | `divider-dark.svg`, `divider-light.svg` |
 | **Section Header** | Styled heading for a section | `header-{name}-dark.svg` |
 
 ### Assembly Pattern
@@ -271,12 +271,14 @@ Every README should be assembled from these component types:
   <a href="#features">Features</a> &bull; <a href="#install">Install</a> &bull; <a href="#usage">Usage</a>
 </p>
 
-<!-- Divider -->
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/divider-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/divider-light.svg">
-  <img alt="" src="./assets/divider-dark.svg" width="100%">
-</picture>
+<!-- Divider: fixed width, centered, so it is as crisp on a phone as on desktop -->
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/divider-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/divider-light.svg">
+    <img alt="" src="./assets/divider-dark.svg" width="240">
+  </picture>
+</p>
 
 ## Section Title
 
@@ -319,16 +321,27 @@ When creating a README, ALWAYS deliver:
 4. **Create dark AND light variants** of every SVG component
 5. **Assemble README** — arrange SVG blocks with markdown text, tables, and accordions between them
 6. **Polish** — spacing, visual rhythm, consistency across all components
+7. **Test on a phone width** — see Phones and Theme Mismatch below
 
 ## SVG Component Design Rules
 
 - **viewBox**: always set `viewBox` and explicit `width`/`height` on root `<svg>`
 - **Width**: use 840px as standard width for all components (fits GitHub's content area)
-- **Height**: varies per component — banners ~280px, feature grids ~380px, steps ~200px, dividers ~2px
+- **Height**: varies per component — banners ~280px, feature grids ~380px, steps ~200px. Dividers are the exception to the 840px width: a ~240×20 ornament shown at natural size
 - **Fonts**: use system font stacks (`'Segoe UI', Arial, sans-serif` for display, `'Courier New', monospace` for code)
 - **Colors**: define a cohesive palette in `<defs>` as `<linearGradient>` elements, reuse across all components
 - **Animations**: SMIL `<animate>` only — gradient shimmer, opacity pulsing, position drift. Keep cycles 3-8s, subtle
 - **Filters**: `<feGaussianBlur>` for glow effects, `<feDropShadow>` for card shadows
 - **Patterns**: `<pattern>` for grid/dot backgrounds
+
+## Phones and Theme Mismatch
+
+On a phone, an 840px component shrinks to under half size, and the `<picture>` variant can land on the wrong page background: `prefers-color-scheme` follows the device or app webview, not the viewer's GitHub theme setting. Designs that look right on desktop can then vanish. Three rules prevent it:
+
+1. **Every component paints its own opaque background panel** (a full-size `<rect>` with the background gradient and rounded corners). Never rely on the page behind the SVG: a transparent diagram drawn in the light variant's dark text disappears on a dark page, while self-backed components still read.
+2. **No full-width hairlines.** A 1–2px line at `width="100%"` drops below one pixel at phone width. Dividers are a fixed-size ornament (about 240×20) shown at natural size, and strokes that carry meaning should stay at least 2px after scaling.
+3. **No empty first frame.** Animations whose start state hides content (opacity fade-ins, typing effects) show nothing in static renderers and at each loop start. Give them a negative `begin` (for example `begin="-6s"`) so the first painted frame is the finished state, or keep the base state visible.
+
+**Test before shipping:** render every component at 375px wide in all four pairings (dark and light variant, each on GitHub's dark `#0d1117` and light `#ffffff` page) and look at the result. Keep image paths repo-relative: in a private repo, absolute `github.com/OWNER/REPO/raw/...` URLs only load with a browser session, not with an app's token.
 
 Remember: Claude is capable of extraordinary creative work. The goal is to make every README look like a designed landing page — assembled from beautiful SVG visual components, with the polish and intentionality of a real website.
