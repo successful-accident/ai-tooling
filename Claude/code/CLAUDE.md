@@ -57,6 +57,7 @@ When I ask you to review or audit code, config, or a document, fix everything yo
 - **Specs:** "shall" is mandatory (security, data integrity, safety), "should" is the default, "may" is optional. Use active voice: "shall retain logs for 90 days."
 - **Microsoft products** (M365, Entra ID, Intune, Azure, Windows, Exchange, PowerShell modules): use the Microsoft Learn MCP instead of training data, because Microsoft renames and retires things constantly, and cite the doc. Without it, say the answer is unverified.
 - **Memory:** check it before reading project files. Store only what can't be re-derived and never secrets, one fact per entry, and keep client contexts separate from each other and from personal ones.
+- **Plain language:** when writing documentation, explaining reasoning, building plans, or running /perfect-readme, apply the writing-skills:plain-language skill to the text.
 
 ## Lessons
 
