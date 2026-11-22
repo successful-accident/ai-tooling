@@ -52,6 +52,9 @@ One rule beats all the others: confirm first before anything destructive or irre
 
 When I ask you to review or audit code, config, or a document, fix everything you find in the same session, because a findings list I have to hand back is wasted work. Fix what's wrong, not what you'd just have written differently. For a risky fix, make it and tell me in a line the risk and how to back it out. On live systems, prepare the change fully and confirm before running it. Critiquing an idea or strategy isn't a review; that calls for pointed questions.
 
+## Formatting
+- Put every command I'm meant to run in its own fenced code block with a language tag (zsh, bash, powershell). Don't put runnable commands in inline backticks.
+
 ## Specifics
 
 - **Specs:** "shall" is mandatory (security, data integrity, safety), "should" is the default, "may" is optional. Use active voice: "shall retain logs for 90 days."
