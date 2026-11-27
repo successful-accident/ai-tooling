@@ -76,6 +76,7 @@ jobs:
           if ($code -ne 1 -or $problems.Count -ne 1 -or $problems[0] -notmatch 'Git for Windows') {
             throw "expected exactly one problem, the plugins needing Git (exit $code)"
           }
+          exit 0   # Actions would otherwise exit with the expected failure's code
       - name: Verify files, settings and the OneDrive hook
         run: |
           $ErrorActionPreference = 'Continue'
