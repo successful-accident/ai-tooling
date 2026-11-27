@@ -1,6 +1,6 @@
 ---
 name: perfect-readme
-description: "Create stunning, website-like GitHub README files with animated SVG banners, multi-column layouts, dark/light theme support, and bold visual design. Use only when the user asks for a visually designed README: a showcase or landing-page style README, a GitHub profile README, or a visual redesign of an existing one. Do not use for ordinary README writing, edits, or updates."
+description: "Create stunning, website-like GitHub README files with animated SVG banners, multi-column layouts, dark/light theme support, and bold visual design. Use whenever a repository needs a README: writing one for a new or undocumented repo, rewriting an existing one, a GitHub profile README, or a visual redesign. Not for small edits to an existing README, such as fixing a typo or updating a command."
 ---
 
 This skill creates distinctive, visually striking GitHub README files that look and feel like polished websites — while working within GitHub's markdown rendering constraints. Every README should be UNFORGETTABLE, not a generic template.
