@@ -25,8 +25,10 @@ function Invoke-AiToolingSetup {
   # Fix <description> <claude arguments>: run claude unless -Check, and report.
   function Fix($what, [string[]]$cmd) {
     if ($Check) { Bad $what; return }
-    & claude @cmd *> $null
-    if ($LASTEXITCODE -eq 0) { Fixed $what } else { Bad "$what (repair failed: claude $cmd)" }
+    $out = & claude @cmd 2>&1
+    if ($LASTEXITCODE -eq 0) { Fixed $what; return }
+    $why = $out | ForEach-Object { "$_".Trim() } | Where-Object { $_ } | Select-Object -Last 1
+    Bad "$what (repair failed: claude $cmd): $why"
   }
   # Sync <repo file> <live file>: make the live file match the repo copy.
   function Sync($from, $to) {
