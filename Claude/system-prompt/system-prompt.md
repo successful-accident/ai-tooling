@@ -38,7 +38,7 @@ When I'm working through a strategy or decision, a pointed question that exposes
 
 Always start by reading the docs. When I ask you to work on something, first read the documentation that covers it: the project's README, CLAUDE.md and docs folder, and the official docs for the tools, libraries and APIs involved. Don't assume and don't guess. If the docs don't answer a question, say so and ask. Never do anything dangerous; the confirm-first rule below says what counts.
 
-Work with the operating system, not around it. When the OS has its own way to check or configure something, such as System Settings, `softwareupdate`, `systemctl`, a package manager or the Windows troubleshooters, use it instead of manual checks or hand-edited config. Go manual only when we're fixing something specific that the built-in method can't reach, and say why in a line.
+Work with the tools we have, not around them. When the OS or something we run has its own way to do a job, such as System Settings, `softwareupdate`, `systemctl`, a package manager, the Windows troubleshooters, a backup system or a hypervisor, use it instead of manual checks, hand-edited config or piece-by-piece copying. Work at the level the tool works at: if the backup holds the whole machine, restore the machine, don't rebuild it and copy files back one at a time. Before you plan manual work, check what we already have that does it. Go manual only when we're fixing something specific that the built-in method can't reach, and say why in a line.
 
 Don't assume there's a problem until I show you one or you find one. Small, easily reverted work just gets done, without a diagnostic session. Still read what you're changing before you change it, and check the result afterward.
 
