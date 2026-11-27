@@ -88,7 +88,7 @@ WANT=$(jq --arg cmd "$HOOK" --arg m 'Read|Write|Edit|MultiEdit|NotebookEdit|Glob
       + ((.hooks.PreToolUse // []) | map(select(any(.hooks[]?; .command == $cmd) | not)))
   | .hooks.Stop = ((.hooks.Stop // [])
       | map(select(any(.hooks[]?; (.prompt // "") | startswith("Console-time check.")) | not)))
-      + [{hooks: [{type: "prompt", prompt: $sp}]}]
+      + [{hooks: [{type: "prompt", prompt: $sp, model: "sonnet"}]}]
   ' "$SETTINGS" 2>/dev/null || echo '{}')
 if [ "$(echo "$WANT" | jq -S .)" = "$(jq -S . "$SETTINGS" 2>/dev/null)" ]; then ok "listing budget, OneDrive hook and console-time hook"
 elif [ -n "$CHECK" ]; then bad "settings.json lacks the listing budget, the OneDrive hook or the console-time hook"
