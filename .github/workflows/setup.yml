@@ -1,0 +1,90 @@
+name: setup
+# Runs setup.sh on macOS and Linux and setup.ps1 on Windows, then checks the result.
+
+on:
+  push:
+    paths: [setup.sh, setup.ps1, setup.json, 'Claude/code/**', 'Claude/skills/**', .github/workflows/setup.yml]
+  pull_request:
+    paths: [setup.sh, setup.ps1, setup.json, 'Claude/code/**', 'Claude/skills/**', .github/workflows/setup.yml]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Set up
+        run: ./setup.sh
+      - name: Check
+        run: ./setup.sh --check
+      - name: Verify files, settings and the OneDrive hook
+        run: |
+          cmp Claude/code/CLAUDE.md ~/.claude/CLAUDE.md
+          jq -e '.hooks.PreToolUse[0].hooks[0].command | endswith("block_onedrive.sh")' ~/.claude/settings.json
+          jq -e '.hooks.Stop[-1].hooks[0].prompt | startswith("Console-time check.")' ~/.claude/settings.json
+          rc=0; echo '{"tool_input":{"file_path":"/Users/x/OneDrive - Co/a.txt"}}' | ~/.claude/hooks/block_onedrive.sh || rc=$?
+          [ "$rc" -eq 2 ]
+          echo '{"tool_input":{"file_path":"/Users/x/Documents/a.txt"}}' | ~/.claude/hooks/block_onedrive.sh
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell   # Windows PowerShell 5.1, the one that ships with Windows
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup.sh refuses Windows and points to setup.ps1
+        shell: bash
+        run: |
+          rc=0; out=$(./setup.sh) || rc=$?
+          echo "$out"
+          [ "$rc" -eq 1 ] && grep -q setup.ps1 <<<"$out"
+      - name: Install Claude Code
+        run: irm https://claude.ai/install.ps1 | iex
+      - name: Hide Git, so the runner looks like a machine with only Windows
+        run: Rename-Item 'C:\Program Files\Git' 'Git.hidden'
+      - name: Set up the way a user would, piped into iex with no checkout
+        run: |
+          $ErrorActionPreference = 'Continue'
+          $env:PATH = "C:\Windows\System32;C:\Windows;C:\Windows\System32\WindowsPowerShell\v1.0;$HOME\.local\bin"
+          foreach ($t in 'git', 'jq') { if (Get-Command $t -ErrorAction SilentlyContinue) { throw "$t is still reachable" } }
+          $env:AI_TOOLING_REF = '${{ github.sha }}'
+          irm 'https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/setup.ps1' | iex
+      - name: Check
+        run: |
+          $ErrorActionPreference = 'Continue'   # Actions sets Stop, which turns any stderr line into a failure
+          $env:PATH = "C:\Windows\System32;C:\Windows;C:\Windows\System32\WindowsPowerShell\v1.0;$HOME\.local\bin"
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1 -Check
+          exit $LASTEXITCODE
+      - name: Verify files, settings and the OneDrive hook
+        run: |
+          $ErrorActionPreference = 'Continue'
+          $c = "$HOME\.claude"
+          if ((Get-FileHash Claude\code\CLAUDE.md).Hash -ne (Get-FileHash "$c\CLAUDE.md").Hash) { throw 'CLAUDE.md differs' }
+          if ([IO.File]::ReadAllBytes("$c\settings.json")[0] -eq 0xEF) { throw 'settings.json starts with a BOM' }
+          $s = [IO.File]::ReadAllText("$c\settings.json") | ConvertFrom-Json
+          $h = "$c\hooks\block_onedrive.ps1"
+          $pre = @($s.hooks.PreToolUse)[0]
+          if ($pre.matcher -notmatch 'PowerShell') { throw "matcher lacks PowerShell: $($pre.matcher)" }
+          if ($pre.hooks[0].command -ne 'powershell.exe' -or @($pre.hooks[0].args)[-1] -ne $h) { throw 'OneDrive hook entry is wrong' }
+          if (-not @($s.hooks.Stop)[-1].hooks[0].prompt.StartsWith('Console-time check.')) { throw 'Stop hook missing' }
+          '{"tool_input":{"file_path":"C:\\Users\\x\\OneDrive - Co\\a.txt"}}' | powershell -NoProfile -ExecutionPolicy Bypass -File $h
+          if ($LASTEXITCODE -ne 2) { throw "hook let a OneDrive path through (exit $LASTEXITCODE)" }
+          '{"tool_input":{"command":"Get-ChildItem C:\\Users\\x\\Documents"}}' | powershell -NoProfile -ExecutionPolicy Bypass -File $h
+          if ($LASTEXITCODE -ne 0) { throw "hook blocked a normal path (exit $LASTEXITCODE)" }
+          Get-Content -Raw "$c\settings.json"

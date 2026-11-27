@@ -1,0 +1,36 @@
+{
+  "marketplaces": [
+    "anthropics/claude-plugins-official",
+    "lawzava/megapowers"
+  ],
+  "plugins": [
+    "claude-code-setup@claude-plugins-official",
+    "commit-commands@claude-plugins-official",
+    "mattpocock-skills@claude-plugins-official",
+    "megapowers@megapowers"
+  ],
+  "mcpServers": {
+    "microsoft-learn": "https://learn.microsoft.com/api/mcp"
+  },
+  "skillListingBudgetFraction": 0.02,
+  "hookMatcher": "Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|LS|Bash|PowerShell",
+  "stopPrompt": "Console-time check. Hook input: $ARGUMENTS\nIf stop_hook_active is true, return {\"ok\": true}. Judge only last_assistant_message. You cannot see the conversation, so never assume what the user already ran, pasted or asked for. If the reply gives the user no shell commands to run by hand, or says the user asked for these commands, return {\"ok\": true}. Otherwise return {\"ok\": false, \"reason\": \"<what to cut>\"} only if the reply itself shows that it (1) asks for a check whose result would not change the next step, (2) gives commands for more than one step (one step may span several hosts), or (3) asks the user to re-run a command or re-paste output it says they already ran or gave. Else return {\"ok\": true}.",
+  "claudeAiPlugins": [
+    "cowork-plugin-management",
+    "frontend-design",
+    "image-generation",
+    "writing-skills",
+    "prompt-design",
+    "prompt-brain",
+    "agent-estimate",
+    "agent-design",
+    "skilldb",
+    "microsoft-docs",
+    "mcp-server-dev",
+    "liquid-glass",
+    "wikipedia",
+    "ralph-loop",
+    "claude-security",
+    "github"
+  ]
+}

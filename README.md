@@ -31,10 +31,13 @@ copy it back here and commit.
 
 ## Setup, check and repair
 
-`setup.sh` sets up Claude Code on a new Mac or under a new account, and repairs
-an existing setup. It is safe to run again: it skips what is already right and
-backs up any file it replaces as `<name>.bak.<timestamp>`. It needs `claude`,
-`jq` and `git`.
+`setup.sh` (macOS and Linux) and `setup.ps1` (Windows) set up Claude Code on a
+new machine or under a new account, and repair an existing setup. They are safe
+to run again: they skip what is already right and back up any file they replace
+as `<name>.bak.<timestamp>`. `setup.sh` needs `claude`, `jq` and `git`.
+`setup.ps1` needs only Claude Code and the Windows PowerShell that comes with
+Windows. Both read their plugin, marketplace, MCP server and settings lists
+from `setup.json`, so change those lists there.
 
 > [!IMPORTANT]
 > It copies the repo's versions over the live ones, so copy live changes back
@@ -67,6 +70,22 @@ This clones the repo to `~/.ai-tooling`, or updates it, and runs from there. Add
 curl -fsSL https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.sh | bash
 ```
 
+**On Windows**, run this in PowerShell. It downloads the repo as a zip, so it
+doesn't need Git.
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.ps1 | iex"
+```
+
+To report only, without changing anything:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((irm https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.ps1))) -Check"
+```
+
+From a checkout, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1`,
+adding `-Check` to report only.
+
 What it covers:
 
 <picture>
@@ -81,6 +100,10 @@ the next step, or asks you to repeat something.
 
 It ends by printing what has to be done by hand in the desktop app, including
 the claude.ai plugins.
+
+A GitHub Actions workflow (`.github/workflows/setup.yml`) runs both scripts on
+macOS, Linux and Windows after each change. On Windows it hides Git first, to
+prove `setup.ps1` needs nothing but Windows.
 
 ### Cloud environments
 
@@ -119,7 +142,7 @@ claude plugin update megapowers@megapowers
 | `Claude/system-prompt/system-prompt.md` | Desktop and claude.ai system prompt (also covers Cowork) | Settings > Your Claude > Instructions for Claude (pasted in) |
 | `Claude/cowork/` | Notes on Cowork, plus any folder or project instructions worth keeping | Cowork Customize panel, project settings |
 | `Claude/code/CLAUDE.md` | Global Claude Code instructions | `~/.claude/CLAUDE.md` |
-| `Claude/code/hooks/` | Claude Code hook scripts. `block_onedrive.sh` denies any tool call that names a OneDrive folder | `~/.claude/hooks/` |
+| `Claude/code/hooks/` | Claude Code hook scripts. `block_onedrive.sh` (macOS, Linux) and `block_onedrive.ps1` (Windows) deny any tool call that names a OneDrive folder | `~/.claude/hooks/`; on Windows, `%USERPROFILE%\.claude\hooks\` |
 | `Claude/skills/<name>/` | Unpacked skill source (`SKILL.md`, scripts, references) | `~/.claude/skills/<name>/` for Claude Code; uploaded as a `.skill` zip for the desktop app |
 
 Add subagent definitions under `Claude/code/agents/` (live copies go in
