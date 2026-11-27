@@ -1,7 +1,9 @@
 # Set up, check or repair my Claude Code setup on Windows from this repo.
 # It uses only what ships with Windows (Windows PowerShell) plus Claude Code
-# itself: no Git, Git Bash or jq. macOS and Linux use setup.sh. Both read their
-# lists from setup.json.
+# itself: no Git, Git Bash or jq. Plugins are the one exception: Claude Code
+# installs them with git clone, so without Git it sets up everything else and
+# reports the plugins as one problem. macOS and Linux use setup.sh. Both read
+# their lists from setup.json.
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1          check and fix
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1 -Check   report only
 # Piped into iex without a checkout, it downloads the repo as a zip (see README).
@@ -27,8 +29,8 @@ function Invoke-AiToolingSetup {
     if ($Check) { Bad $what; return }
     $out = & claude @cmd 2>&1
     if ($LASTEXITCODE -eq 0) { Fixed $what; return }
-    $why = $out | ForEach-Object { "$_".Trim() } | Where-Object { $_ } | Select-Object -Last 1
-    Bad "$what (repair failed: claude $cmd): $why"
+    Bad "$what (repair failed: claude $cmd)"
+    $out | ForEach-Object { "$_".Trim() } | Where-Object { $_ } | ForEach-Object { Write-Host "           $_" }
   }
   # Sync <repo file> <live file>: make the live file match the repo copy.
   function Sync($from, $to) {
@@ -111,11 +113,21 @@ function Invoke-AiToolingSetup {
     Write-Host 'Plugins'
     $markets = ClaudeJson @('plugin', 'marketplace', 'list', '--json')
     $plugins = ClaudeJson @('plugin', 'list', '--json')
+    # Claude Code installs plugins with git clone, so without Git they can't be added.
+    $noGit = -not (Get-Command git -ErrorAction SilentlyContinue)
+    $needGit = @()
     foreach ($mk in $Manifest.marketplaces) {
-      if ($markets.repo -contains $mk) { Ok "marketplace $mk" } else { Fix "marketplace $mk" @('plugin', 'marketplace', 'add', $mk) }
+      if ($markets.repo -contains $mk) { Ok "marketplace $mk" }
+      elseif ($noGit) { $needGit += "marketplace $mk" }
+      else { Fix "marketplace $mk" @('plugin', 'marketplace', 'add', $mk) }
     }
     foreach ($p in $Manifest.plugins) {
-      if ($plugins.id -contains $p) { Ok $p } else { Fix $p @('plugin', 'install', $p) }
+      if ($plugins.id -contains $p) { Ok $p }
+      elseif ($noGit) { $needGit += $p }
+      else { Fix $p @('plugin', 'install', $p) }
+    }
+    if ($needGit) {
+      Bad "not installed: $($needGit -join ', '). Claude Code installs plugins with git clone, so install Git for Windows (git-scm.com/downloads/win), then run this again."
     }
 
     Write-Host 'MCP servers'

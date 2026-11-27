@@ -36,7 +36,9 @@ new machine or under a new account, and repair an existing setup. They are safe
 to run again: they skip what is already right and back up any file they replace
 as `<name>.bak.<timestamp>`. `setup.sh` needs `claude`, `jq` and `git`.
 `setup.ps1` needs only Claude Code and the Windows PowerShell that comes with
-Windows. Both read their plugin, marketplace, MCP server and settings lists
+Windows. Plugins are the exception: Claude Code installs them with `git clone`,
+so they need [Git for Windows](https://git-scm.com/downloads/win). Without it,
+`setup.ps1` sets up everything else and reports the plugins as one problem. Both read their plugin, marketplace, MCP server and settings lists
 from `setup.json`, so change those lists there.
 
 > [!IMPORTANT]
@@ -103,7 +105,8 @@ the claude.ai plugins.
 
 A GitHub Actions workflow (`.github/workflows/setup.yml`) runs both scripts on
 macOS, Linux and Windows after each change. On Windows it hides Git first, to
-prove `setup.ps1` needs nothing but Windows.
+prove `setup.ps1` needs nothing but Windows, then restores Git and checks that
+the plugins install.
 
 ### Cloud environments
 
