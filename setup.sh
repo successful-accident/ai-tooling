@@ -78,13 +78,20 @@ echo "Settings"
 SETTINGS="$HOME/.claude/settings.json"
 [ -f "$SETTINGS" ] || { [ -n "$CHECK" ] || echo '{}' > "$SETTINGS"; }
 HOOK="$HOME/.claude/hooks/block_onedrive.sh"
-WANT=$(jq --arg cmd "$HOOK" --arg m 'Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|LS|Bash' '
+# A prompt hook on Stop: a small model reads each final reply and sends it back
+# if it wastes the time of a user who runs the commands by hand.
+STOP_PROMPT='Console-time check. Hook input: $ARGUMENTS
+If stop_hook_active is true, return {"ok": true}. Read last_assistant_message. If it gives the user no shell commands to run by hand, return {"ok": true}. Otherwise return {"ok": false, "reason": "<what to cut>"} if it (1) asks the user to run a check whose result would not change their next step, (2) gives commands beyond the next step, or (3) asks the user to re-run a command or re-paste output they already ran or gave. Else return {"ok": true}.'
+WANT=$(jq --arg cmd "$HOOK" --arg m 'Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|LS|Bash' --arg sp "$STOP_PROMPT" '
   .skillListingBudgetFraction = 0.02
   | .hooks.PreToolUse = [{matcher: $m, hooks: [{type: "command", command: $cmd}]}]
       + ((.hooks.PreToolUse // []) | map(select(any(.hooks[]?; .command == $cmd) | not)))
+  | .hooks.Stop = ((.hooks.Stop // [])
+      | map(select(any(.hooks[]?; (.prompt // "") | startswith("Console-time check.")) | not)))
+      + [{hooks: [{type: "prompt", prompt: $sp}]}]
   ' "$SETTINGS" 2>/dev/null || echo '{}')
-if [ "$(echo "$WANT" | jq -S .)" = "$(jq -S . "$SETTINGS" 2>/dev/null)" ]; then ok "listing budget and OneDrive hook"
-elif [ -n "$CHECK" ]; then bad "settings.json lacks the listing budget or the OneDrive hook entry"
+if [ "$(echo "$WANT" | jq -S .)" = "$(jq -S . "$SETTINGS" 2>/dev/null)" ]; then ok "listing budget, OneDrive hook and console-time hook"
+elif [ -n "$CHECK" ]; then bad "settings.json lacks the listing budget, the OneDrive hook or the console-time hook"
 else cp -f "$SETTINGS" "$SETTINGS.bak.$STAMP"; echo "$WANT" > "$SETTINGS"; fixed "settings.json"; fi
 
 echo "Plugins"

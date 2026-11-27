@@ -75,6 +75,10 @@ What it covers:
   <img alt="CLAUDE.md, hooks, skills, the two settings.json entries it owns (the skill listing budget and the OneDrive hook), the Claude Code plugins and the Microsoft Learn MCP server" src="./.github/assets/coverage-light.svg" width="100%">
 </picture>
 
+It also adds a prompt hook on `Stop`: a small model reads each final reply
+and sends it back if it makes you run a needless check, gives commands past
+the next step, or asks you to repeat something.
+
 It ends by printing what has to be done by hand in the desktop app, including
 the claude.ai plugins.
 
