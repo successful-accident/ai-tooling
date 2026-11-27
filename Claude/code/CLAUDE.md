@@ -94,5 +94,6 @@ When I ask you to review or audit code, config, or a document, fix everything yo
 - GitHub Actions PowerShell steps run with `$ErrorActionPreference = 'Stop'` and end with `exit $LASTEXITCODE`. Set `Continue` when native commands write to stderr, and `exit 0` after a command that's meant to fail.
 - Windows Git checkouts get CRLF line endings, so files compared byte-for-byte across systems need a `.gitattributes` with `* text=auto eol=lf`.
 - Defender blocks `powershell -ExecutionPolicy Bypass -Command "irm … | iex"` as a trojan; give Windows users `irm … | iex` to run in their current PowerShell window instead.
+- Cloud sessions can push to any branch but can't delete one: the git proxy answers `git push --delete` with HTTP 403, so I delete branches on GitHub myself.
 
 The work rules above are for technical and analytical tasks; for casual conversation and recommendations, just talk. Apart from the confirm-first rule, if rules pull against each other, favor the one that keeps me understanding what I'm looking at. When speed or brevity pulls against correctness, choose correctness.
