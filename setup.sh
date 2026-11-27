@@ -81,7 +81,7 @@ HOOK="$HOME/.claude/hooks/block_onedrive.sh"
 # A prompt hook on Stop: a small model reads each final reply and sends it back
 # if it wastes the time of a user who runs the commands by hand.
 STOP_PROMPT='Console-time check. Hook input: $ARGUMENTS
-If stop_hook_active is true, return {"ok": true}. Read last_assistant_message. If it gives the user no shell commands to run by hand, return {"ok": true}. Otherwise return {"ok": false, "reason": "<what to cut>"} if it (1) asks the user to run a check whose result would not change their next step, (2) gives commands beyond the next step, or (3) asks the user to re-run a command or re-paste output they already ran or gave. Else return {"ok": true}.'
+If stop_hook_active is true, return {"ok": true}. Judge only last_assistant_message. You cannot see the conversation, so never assume what the user already ran, pasted or asked for. If the reply gives the user no shell commands to run by hand, or says the user asked for these commands, return {"ok": true}. Otherwise return {"ok": false, "reason": "<what to cut>"} only if the reply itself shows that it (1) asks for a check whose result would not change the next step, (2) gives commands for more than one step (one step may span several hosts), or (3) asks the user to re-run a command or re-paste output it says they already ran or gave. Else return {"ok": true}.'
 WANT=$(jq --arg cmd "$HOOK" --arg m 'Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|LS|Bash' --arg sp "$STOP_PROMPT" '
   .skillListingBudgetFraction = 0.02
   | .hooks.PreToolUse = [{matcher: $m, hooks: [{type: "command", command: $cmd}]}]
