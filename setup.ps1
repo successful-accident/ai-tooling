@@ -52,7 +52,9 @@ function Invoke-AiToolingSetup {
 
   Write-Host 'Prerequisites'
   if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
-    Bad 'claude is not installed. Install it with: irm https://claude.ai/install.ps1 | iex'
+    $native = Join-Path $HOME '.local\bin\claude.exe'   # where the native installer puts it
+    if (Test-Path $native) { Bad "claude is installed at $native, but that folder isn't on your PATH. Add it to your user PATH, open a new terminal, then run this again." }
+    else { Bad 'claude is not installed. Install it with: irm https://claude.ai/install.ps1 | iex' }
     return
   }
   Ok 'claude'

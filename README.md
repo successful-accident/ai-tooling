@@ -73,16 +73,18 @@ curl -fsSL https://raw.githubusercontent.com/successful-accident/ai-tooling/main
 ```
 
 **On Windows**, run this in PowerShell. It downloads the repo as a zip, so it
-doesn't need Git.
+doesn't need Git. Run it in your PowerShell window as shown: wrapped in a new
+`powershell -ExecutionPolicy Bypass -Command` process, Microsoft Defender
+blocks it as `Trojan:Win32/Commando.B!ml`.
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.ps1 | iex"
+irm https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.ps1 | iex
 ```
 
 To report only, without changing anything:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((irm https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.ps1))) -Check"
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/successful-accident/ai-tooling/main/setup.ps1))) -Check
 ```
 
 From a checkout, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1`,

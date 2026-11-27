@@ -10,7 +10,7 @@ set -u
 REPO=successful-accident/ai-tooling
 case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*)
   echo "This is Windows. Run setup.ps1 from PowerShell instead:"
-  echo "  powershell -NoProfile -ExecutionPolicy Bypass -Command \"irm https://raw.githubusercontent.com/$REPO/main/setup.ps1 | iex\""
+  echo "  irm https://raw.githubusercontent.com/$REPO/main/setup.ps1 | iex"
   exit 1 ;;
 esac
 CHECK=""; [ "${1:-}" = "--check" ] && CHECK=1
